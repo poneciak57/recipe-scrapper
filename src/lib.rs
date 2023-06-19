@@ -16,9 +16,9 @@ pub async fn run() {
             let recipes = match arg.website {
                 Aniagotuje(website_arg) => aniagotuje::steal(website_arg)
             }.await;
-            if let Some(&filename) = arg.filename {
+            if let Some(filename) = arg.filename {
                 // write recipes to file
             }
         }
-    }.await
+    }
 }

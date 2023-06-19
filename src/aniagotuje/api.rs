@@ -12,7 +12,7 @@ fn get_url(categories_str: AStr, page: u64) -> String {
 async fn get_recipes_page(categories_str: AStr, page: u64) -> Vec<Recipe> {
     reqwest::get(get_url(categories_str, page)).await.unwrap()
         .json::<ApiRes>().await.unwrap()
-        .content.par_iter()
+        .content.iter()
         .filter_map(|r| {
             if !r.recipe {
                 return None
@@ -22,14 +22,14 @@ async fn get_recipes_page(categories_str: AStr, page: u64) -> Vec<Recipe> {
             let image = r.post_thumb.url.clone();
             let link = create_url_from_slug(r.slug.clone());
 
-            let tags: Vec<String> = r.categories.par_iter().filter_map(|t| {
+            let tags: Vec<String> = r.categories.iter().filter_map(|t| {
                 if t.cat_type != "TAG" {
                     return Some(t.name.clone())
                 }
                 None
             }).collect();
 
-            let _products: Vec<String> = r.categories.par_iter().filter_map(|t| {
+            let _products: Vec<String> = r.categories.iter().filter_map(|t| {
                 if t.cat_type == "TAG" {
                     return Some(t.name.clone())
                 }
