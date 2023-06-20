@@ -1,6 +1,8 @@
 use clap::Parser;
+use log::LevelFilter;
 use crate::cli::{Cli, Commands};
 use crate::cli::Websites::Aniagotuje;
+use crate::config::LOGGER;
 
 mod aniagotuje;
 mod cli;
@@ -9,7 +11,9 @@ pub(crate) mod prelude;
 pub(crate) mod config;
 
 fn config() {
-
+    log::set_logger(&LOGGER)
+        .map(|()| log::set_max_level(LevelFilter::Info))
+        .expect("Failed to configure logger")
 }
 
 pub async fn run() {

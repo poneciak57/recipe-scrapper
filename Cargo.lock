@@ -1105,6 +1105,7 @@ dependencies = [
  "clap",
  "futures",
  "itertools",
+ "log",
  "reqwest",
  "scraper",
  "serde",

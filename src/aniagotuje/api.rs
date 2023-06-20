@@ -1,3 +1,4 @@
+use log::info;
 use serde::Deserialize;
 use crate::prelude::*;
 
@@ -45,7 +46,7 @@ async fn get_recipes_page(categories_str: AStr, page: u64) -> Vec<Recipe> {
 pub async fn get_recipes(categories_str: AStr) -> Vec<Recipe> {
     let pages = reqwest::get(get_url(categories_str.clone(), 0)).await.unwrap()
         .json::<ApiRes>().await.unwrap().total_pages;
-
+    info!("Reading recipes meta data from {} pages ...", pages);
     futures::stream::iter(0..pages)
         .map(|page| get_recipes_page(categories_str.clone(), page))
         .buffered(PARALLELISM_FACTOR)

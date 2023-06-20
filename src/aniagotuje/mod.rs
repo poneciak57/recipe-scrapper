@@ -2,6 +2,7 @@ mod api;
 mod web;
 
 use clap::Args;
+use log::info;
 use crate::aniagotuje::api::get_recipes;
 use crate::aniagotuje::web::get_recipes_with_products;
 use crate::prelude::*;
@@ -14,16 +15,13 @@ pub struct AniagotujeArgs {
 }
 
 pub async fn steal(args: AniagotujeArgs) -> Vec<Recipe>{
+    info!("Stealing from aniagotuje.pl ...");
     let categories = if args.categories.contains(&"ALL".to_string()) {
         Arc::from("")
     } else { Arc::from(args.categories.join(",").as_str()) };
 
     let recipes_meta = get_recipes(Arc::from(categories)).await;
     let recipes = get_recipes_with_products(recipes_meta).await;
-    println!("Stole {} recipes", recipes.len());
-    println!("Recipe1: {:#?}", recipes.get(0).unwrap());
-    println!("Recipe2: {:#?}", recipes.get(1).unwrap());
-    println!("Recipe3: {:#?}", recipes.get(2).unwrap());
-
+    info!("Successfully stole {} recipes", recipes.len());
     recipes
 }

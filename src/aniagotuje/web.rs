@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use log::info;
 use scraper::{Html, Selector};
 use crate::prelude::*;
 
@@ -19,6 +20,7 @@ async fn get_products_for_recipe(mut recipe: Recipe) -> Recipe {
 }
 
 pub async fn get_recipes_with_products(recipes: Vec<Recipe>) -> Vec<Recipe> {
+    info!("Reading products for {} recipes ...", recipes.len());
     futures::stream::iter(recipes)
         .map(|r| get_products_for_recipe(r))
         .buffered(PARALLELISM_FACTOR)
