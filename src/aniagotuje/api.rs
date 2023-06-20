@@ -48,7 +48,10 @@ pub async fn get_recipes(categories_str: AStr) -> Vec<Recipe> {
 
     futures::stream::iter(0..pages)
         .map(|page| get_recipes_page(categories_str.clone(), page))
-        .buffered(5).map(futures::stream::iter).flatten().collect().await
+        .buffered(PARALLELISM_FACTOR)
+        .map(futures::stream::iter)
+        .flatten()
+        .collect().await
 }
 
 #[derive(Deserialize)]

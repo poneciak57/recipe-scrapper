@@ -6,9 +6,14 @@ mod aniagotuje;
 mod cli;
 pub(crate) mod model;
 pub(crate) mod prelude;
+pub(crate) mod config;
 
+fn config() {
+
+}
 
 pub async fn run() {
+    config();
     let cli = Cli::parse();
 
     match cli.command {
