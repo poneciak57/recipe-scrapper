@@ -1,5 +1,5 @@
 use log::{Record, Level, Metadata};
-pub static PARALLELISM_FACTOR: usize = 5;
+pub static PARALLELISM_FACTOR: usize = 20;
 pub static LOGGER: SimpleLogger = SimpleLogger;
 
 pub struct SimpleLogger;

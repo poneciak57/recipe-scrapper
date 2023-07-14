@@ -9,6 +9,7 @@ mod cli;
 pub(crate) mod model;
 pub(crate) mod prelude;
 pub(crate) mod config;
+pub(crate) mod products;
 
 fn config() {
     log::set_logger(&LOGGER)
