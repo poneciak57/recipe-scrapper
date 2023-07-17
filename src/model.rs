@@ -1,3 +1,4 @@
+use itertools::Itertools;
 
 #[derive(Debug, Default)]
 pub struct Recipe {
@@ -24,6 +25,11 @@ impl Recipe {
     }
 
     pub fn into_string_line(self) -> String {
-        todo!()
+        format!("{}, {}, {}, [{}], [{}]",
+                self.title,
+                self.image,
+                self.link,
+                self.products.iter().join(","),
+                self.tags.iter().join(","))
     }
 }
