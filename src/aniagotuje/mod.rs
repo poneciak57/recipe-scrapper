@@ -6,7 +6,6 @@ use log::info;
 use crate::aniagotuje::api::get_recipes;
 use crate::aniagotuje::web::get_recipes_with_products;
 use crate::prelude::*;
-use crate::products::ProductAnalyzer;
 
 #[derive(Args)]
 pub struct AniagotujeArgs {
@@ -24,10 +23,7 @@ pub async fn steal(args: AniagotujeArgs) -> Vec<Recipe>{
     };
 
     let recipes_meta = get_recipes(Arc::from(categories)).await;
-    let mut recipes = get_recipes_with_products(recipes_meta).await;
-
-    let prod_analyzer = ProductAnalyzer::new();
-    prod_analyzer.analyze_recipes(&mut recipes);
+    let recipes = get_recipes_with_products(recipes_meta).await;
 
     recipes
 }

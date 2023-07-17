@@ -8,6 +8,7 @@ use crate::cli::{Cli, Commands, StealArgs};
 use crate::cli::Websites::Aniagotuje;
 use crate::config::LOGGER;
 use crate::prelude::*;
+use crate::products::ProductAnalyzer;
 
 mod aniagotuje;
 mod cli;
@@ -17,10 +18,13 @@ pub(crate) mod config;
 pub(crate) mod products;
 
 async fn steal(arg: StealArgs) {
-    let recipes = match arg.website {
+    let mut recipes = match arg.website {
         Aniagotuje(website_arg) => aniagotuje::steal(website_arg)
     }.await;
     info!("Successfully stole {} recipes", recipes.len());
+
+    let prod_analyzer = ProductAnalyzer::new();
+    prod_analyzer.analyze_recipes(&mut recipes);
 
     info!("Preparing result to display ...");
     let recipe_str: String = recipes.iter()
