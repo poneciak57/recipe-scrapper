@@ -4,6 +4,7 @@ use log::{info, LevelFilter};
 use crate::cli::{Cli, Commands};
 use crate::cli::Websites::Aniagotuje;
 use crate::config::LOGGER;
+use crate::prelude::*;
 
 mod aniagotuje;
 mod cli;
@@ -28,15 +29,15 @@ pub async fn run() {
                 Aniagotuje(website_arg) => aniagotuje::steal(website_arg)
             }.await;
             info!("Successfully stole {} recipes", recipes.len());
-            info!("Recipe1: {:#?}", recipes.get(0).unwrap());
-            info!("Recipe2: {:#?}", recipes.get(1).unwrap());
 
-            let recipe_str: Vec<String> = recipes.iter()
-                .map(|r| r.into_string_line())
-                .collect();
+            let recipe_str: String = recipes.iter()
+                .map(|r| r.as_string_line())
+                .join("\n");
 
             if let Some(filename) = arg.filename {
                 // write recipes to file
+            } else {
+                println!("{recipe_str}");
             }
         }
     }

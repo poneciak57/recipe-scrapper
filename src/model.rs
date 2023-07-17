@@ -24,7 +24,7 @@ impl Recipe {
         todo!()
     }
 
-    pub fn into_string_line(self) -> String {
+    pub fn as_string_line(&self) -> String {
         format!("{}, {}, {}, [{}], [{}]",
                 self.title,
                 self.image,

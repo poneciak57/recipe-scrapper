@@ -26,5 +26,5 @@ def revertWords(x):
                 return key
         else:
             continue
-
-    return f"Nie wiem co to {interpreted_ingredient}"
+    return None
+#     return f"Nie wiem co to {interpreted_ingredient}"
