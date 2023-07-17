@@ -1,6 +1,8 @@
 import morfeusz2
 import json
 
+morf = morfeusz2.Morfeusz()
+
 with open("skladniki.json", encoding="utf-8") as json_file:
     jsoningr = json.load(json_file)
 
@@ -13,8 +15,6 @@ def check_if_matches(z, text):
 
 #ZAMIENIA SKŁADNIK Z PRZEPISU DO JEGO PODSTAWOWEJ FORMY NP. 2 ZÓŁTKA JAJEK -> [JAJKA, JAJKO, JAJO, JAJA]
 def revertWords(x):
-    morf = morfeusz2.Morfeusz()
-
     interpreted_ingredient = []
     for interpretation in morf.analyse(x):
         interpreted_ingredient.append(interpretation[2][1].split(":")[0])
