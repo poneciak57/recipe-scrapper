@@ -13,14 +13,14 @@ impl ProductAnalyzer {
         let gil = Python::acquire_gil();
         let py = gil.python();
         let module = py.import("analyzer_module")
-            .expect("ERROR: Failed to load python module");
+            .expect("Error: Failed to load python module");
         ProductAnalyzer { module, gil }
     }
 
     pub fn analyze_recipes(&self, recipes: &mut Vec<Recipe>) {
         let py = self.gil.python();
         let revert_words_func = self.module.get(py, "revertWords")
-            .expect("ERROR: Failed to get revertWords function from python module");
+            .expect("Error: Failed to get revertWords function from python module");
 
         info!("Analyzing products ...");
         recipes.iter_mut().for_each(|recipe| {
