@@ -4,13 +4,14 @@ use std::time::Instant;
 use clap::Parser;
 use itertools::Itertools;
 use log::{info, LevelFilter};
-use crate::cli::{Cli, Commands, StealArgs};
-use crate::cli::Websites::Aniagotuje;
+use crate::cli::{Cli, Commands, StealArgs, Websites};
 use crate::config::LOGGER;
 use crate::prelude::*;
 use crate::products::ProductAnalyzer;
 
+mod cakeit;
 mod aniagotuje;
+mod posypane;
 mod cli;
 pub(crate) mod model;
 pub(crate) mod prelude;
@@ -19,7 +20,9 @@ pub(crate) mod products;
 
 async fn steal(arg: StealArgs) {
     let mut recipes = match arg.website {
-        Aniagotuje(website_arg) => aniagotuje::steal(website_arg)
+        Websites::Aniagotuje(website_arg) => aniagotuje::steal(website_arg),
+        Websites::CakeIt(website_arg) => cakeit::steal(website_arg),
+        Websites::Posypane(website_arg) => posypane::steal(website_arg),
     }.await;
     info!("Successfully stole {} recipes", recipes.len());
 

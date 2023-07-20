@@ -1,5 +1,7 @@
 use clap::{Args, Parser, Subcommand};
 use crate::aniagotuje::AniagotujeArgs;
+use crate::cakeit::CakeitArgs;
+use crate::posypane::PosypaneArgs;
 
 /// Program for stealing recipes from popular websites
 #[derive(Parser)]
@@ -19,7 +21,9 @@ pub enum  Commands {
 #[derive(Subcommand)]
 pub enum Websites {
     /// Steal from aniagotuje.pl
-    Aniagotuje (AniagotujeArgs)
+    Aniagotuje (AniagotujeArgs),
+    CakeIt (CakeitArgs),
+    Posypane (PosypaneArgs)
 }
 
 #[derive(Args)]
