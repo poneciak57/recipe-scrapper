@@ -2,6 +2,7 @@ use itertools::Itertools;
 use log::info;
 use scraper::{Html, Selector};
 use crate::prelude::*;
+use crate::products::ProductState;
 
 async fn get_products_for_recipe(mut recipe: Recipe) -> Recipe {
     let ingredients_list: Selector = Selector::parse(".recipe-ing-list").unwrap();
@@ -9,9 +10,9 @@ async fn get_products_for_recipe(mut recipe: Recipe) -> Recipe {
     let res = reqwest::get(&recipe.link).await.unwrap()
         .text().await.unwrap();
     let document = Html::parse_document(&res);
-    let list_of_products: Vec<String> = document.select(&ingredients_list)
+    let list_of_products: Vec<ProductState> = document.select(&ingredients_list)
         .map(|l| l.select(&ingredient)
-            .map(|i| i.text().join("")).collect::<Vec<String>>()
+            .map(|i| ProductState::WAITING(i.text().join(""))).collect::<Vec<ProductState>>()
         )
         .flatten()
         .collect();

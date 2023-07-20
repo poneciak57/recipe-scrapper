@@ -12,3 +12,5 @@ or after build
 ```cmd
 recipe_scrapper help
 ```
+
+> Remeber to install with pip: morfeusz2, requests

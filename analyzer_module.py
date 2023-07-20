@@ -1,10 +1,23 @@
 import morfeusz2
+import requests
 import json
 
 morf = morfeusz2.Morfeusz()
 
 with open("skladniki.json", encoding="utf-8") as json_file:
     jsoningr = json.load(json_file)
+
+def send_for_veryfication(original, analyzed):
+    url = "http://pb.what2bake.com/api/collections/product_analyzing/records"
+    headers = {
+        "Authorization": "Bearer"
+    }
+    payload = {
+        "original_text": original,
+        "analyzed_product": analyzed,
+        "state": "UNCHECKED"
+    }
+    response = requests.post(url, json=payload, headers=headers)
 
 #SPRAWDZA CZY SKŁADNIK ZE STRONY PASUJE DO KTÓREGOŚ Z SKLADNIKI.JSON
 def check_if_matches(z, text):
@@ -22,9 +35,11 @@ def revertWords(x):
         for sing_ingr in ingr:
             if check_if_matches(interpreted_ingredient, sing_ingr):
                 if key == "":
+#                     send_for_veryfication(x, interpreted_ingredient)
                     return None
+#                 send_for_veryfication(x, key)
                 return key
         else:
             continue
+#     send_for_veryfication(x, interpreted_ingredient)
     return None
-#     return f"Nie wiem co to {interpreted_ingredient}"

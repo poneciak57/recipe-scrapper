@@ -2,6 +2,29 @@ use cpython::{GILGuard, ObjectProtocol, PyModule, PyObject, Python, ToPyObject};
 use log::info;
 use crate::prelude::Recipe;
 
+#[derive(Debug, Clone)]
+pub enum ProductState {
+    ANALYZED(String),
+    WAITING(String),
+    UNRECOGNIZED(String),
+}
+impl ProductState {
+    pub fn to_string(self) -> String {
+        match self {
+            ProductState::ANALYZED(s) => format!("{s}"),
+            ProductState::WAITING(s) => format!("Error: Produkt oczekuje na analize: {s}"),
+            ProductState::UNRECOGNIZED(s) => format!("NIE ROZPOZNANO SKłADNIKA: {s}"),
+        }
+    }
+    pub fn as_string(&self) -> String {
+        match self {
+            ProductState::ANALYZED(s) => format!("{s}"),
+            ProductState::WAITING(s) => format!("Error: Produkt oczekuje na analize: {s}"),
+            ProductState::UNRECOGNIZED(s) => format!("NIE ROZPOZNANO SKłADNIKA: {s}"),
+        }
+    }
+}
+
 pub struct ProductAnalyzer {
     gil: GILGuard,
     module: PyModule
@@ -24,8 +47,15 @@ impl ProductAnalyzer {
 
         info!("Analyzing products ...");
         recipes.iter_mut().for_each(|recipe| {
-            let products: Vec<String> = recipe.products.iter().map(|prod| {
-                ProductAnalyzer::analyze_product(&py, &revert_words_func, prod).unwrap_or(format!("NIE ROZPOZNANO SKłADNIKA: {prod}"))
+            let products: Vec<ProductState> = recipe.products.iter().map(|p| {
+                if let ProductState::WAITING(prod) = p {
+                    let analyzed = match ProductAnalyzer::analyze_product(&py, &revert_words_func, prod) {
+                        None => ProductState::UNRECOGNIZED(prod.clone()),
+                        Some(s) => ProductState::ANALYZED(s)
+                    };
+                    return analyzed
+                }
+                unreachable!()
             }).collect();
             recipe.products = products;
         });
