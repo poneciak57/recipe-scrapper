@@ -1,4 +1,5 @@
 use itertools::Itertools;
+use crate::products::ProductState;
 
 #[derive(Debug, Default)]
 pub struct Recipe {
@@ -6,11 +7,11 @@ pub struct Recipe {
     pub image: String,
     pub link: String,
     pub tags: Vec<String>,
-    pub products: Vec<String>
+    pub products: Vec<ProductState>
 }
 
 impl Recipe {
-    pub fn new(title: String, image: String, link: String, tags: Vec<String>, products: Vec<String>) -> Self{
+    pub fn new(title: String, image: String, link: String, tags: Vec<String>, products: Vec<ProductState>) -> Self {
         Self {
             title,
             image,
@@ -29,7 +30,9 @@ impl Recipe {
                 self.title,
                 self.image,
                 self.link,
-                self.products.iter().join(","),
+                self.products.iter()
+                    .map(ProductState::as_string)
+                    .join(","),
                 self.tags.iter().join(","))
     }
 }
